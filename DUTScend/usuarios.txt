@@ -1,0 +1,3 @@
+Stephannya,Becerra Viviescas,stepha,123,399.0
+Dylan L,Delgado,dylan,1234,1601.0
+1,1,1,1,0.0
