@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 
 public class DUTScend_usuarios {
 
-     private String nombre;
+    private String nombre;
     private String apellido;
     private String usuario;
     private double saldo;
@@ -34,10 +34,21 @@ public class DUTScend_usuarios {
         this.saldo = saldo;
     }
 
-    public String getNombre() { return nombre; }
-    public String getApellido() { return apellido; }
-    public String getUsuario() { return usuario; }
-    public double getSaldo() { return saldo; }
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
 
     // Método para cargar usuarios desde el archivo
     public static void cargarUsuariosDesdeArchivo(String archivo) {
@@ -46,15 +57,22 @@ public class DUTScend_usuarios {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(",");
-                double saldo = (datos.length == 4) ? Double.parseDouble(datos[3]) : SALDO_INICIAL; // Si no hay saldo, asignar 1000
+                double saldo;
+                if (datos.length == 4 && !datos[3].isEmpty()) {
+                    saldo = Double.parseDouble(datos[3]);
+                } else {
+                    saldo = SALDO_INICIAL;
+                }
+                System.out.println("Cargando usuario: " + datos[0] + " " + datos[1] + " - Saldo leído: " + ((datos.length == 4) ? datos[3] : "Saldo por defecto"));
                 listaUsuarios.add(new DUTScend_usuarios(datos[0], datos[1], datos[2], saldo));
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error al leer el archivo: " + e.getMessage());
         }
     }
+    
 
-    // Método para guardar usuarios en el archivo con saldo inicial
+    
     public static void guardarUsuarioEnArchivo(String archivo, DUTScend_usuarios usuario) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(archivo, true))) {
             pw.println(usuario.getNombre() + "," + usuario.getApellido() + "," + usuario.getUsuario() + "," + usuario.getSaldo());
@@ -63,7 +81,7 @@ public class DUTScend_usuarios {
         }
     }
 
-    // Método para mostrar todos los usuarios guardados con su saldo
+   
     public static void mostrarUsuarios() {
         if (listaUsuarios.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No hay usuarios guardados.");

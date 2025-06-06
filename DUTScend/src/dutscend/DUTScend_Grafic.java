@@ -6,6 +6,7 @@ package dutscend;
 
 import java.awt.Component;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -17,7 +18,8 @@ import javax.swing.SwingUtilities;
  */
 public class DUTScend_Grafic extends javax.swing.JFrame {
 
-    
+   
+       
     public DUTScend_Grafic() {
         initComponents();
 
@@ -193,6 +195,11 @@ public class DUTScend_Grafic extends javax.swing.JFrame {
                 "CANTIDAD", "DESCRIPCION", "FECHA"
             }
         ));
+        inscritos.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                inscritosPropertyChange(evt);
+            }
+        });
         jScrollPane1.setViewportView(inscritos);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -293,15 +300,9 @@ public class DUTScend_Grafic extends javax.swing.JFrame {
     }//GEN-LAST:event_eventosActionPerformed
 
     private void btn_saldoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_btn_saldoPropertyChange
-   moneda miMoneda = new moneda(0.0); // Valor inicial
-
-miMoneda.addPropertyChangeListener(evento -> {
-    if ("valor".equals(evento.getPropertyName())) { 
-        SwingUtilities.invokeLater(() -> btn_saldo.setText("$ " + evento.getNewValue())); 
-    }
-});
-
-miMoneda.setValor(1000);
+ double saldo = DUTScend_leerUsuarios.cargarSaldoDesdeUsuarios();
+btn_saldo.setText("$ " + saldo );
+    
     }//GEN-LAST:event_btn_saldoPropertyChange
 
     private void cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarActionPerformed
@@ -326,6 +327,10 @@ JOptionPane.showMessageDialog(null, "Promedios de Transferencias\n" +
     "Anual: " + (promedioAnual >= 0 ? promedioAnual : "No hay transferencias este año") + " duts.");
 
     }//GEN-LAST:event_promedioActionPerformed
+
+    private void inscritosPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_inscritosPropertyChange
+   registro_transferencias.cargarMovimientosEnTabla(inscritos);
+    }//GEN-LAST:event_inscritosPropertyChange
 
     /**
      * @param args the command line arguments

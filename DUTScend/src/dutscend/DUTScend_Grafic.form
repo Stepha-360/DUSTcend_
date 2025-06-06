@@ -364,6 +364,9 @@
                       </Table>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="inscritosPropertyChange"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

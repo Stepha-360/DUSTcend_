@@ -1,3 +1,5 @@
-Stephannya,Becerra Viviescas,stepha,123,399.0
-Dylan L,Delgado,dylan,1234,1601.0
+Stephannya,Becerra Viviescas,stepha,123,999.0
+Dylan L,Delgado,dylan,1234,1001.0
 1,1,1,1,0.0
+miguel,Becerra V,miguel,1234,0.0
+11,1,1,123,0.0

@@ -8,10 +8,10 @@ import java.util.List;
 
 public class moneda {
 
-   private double valor;
+    private double valor;
     private final PropertyChangeSupport soporte;
     private static final String ARCHIVO_USUARIOS = "usuarios.txt";
-    private static final String ARCHIVO_SESION = "sesion.txt"; 
+    private static final String ARCHIVO_SESION = "sesion.txt";
 
     public moneda(double valorInicial) {
         this.valor = valorInicial;
@@ -33,7 +33,33 @@ public class moneda {
     }
 
     /**
-     * Recupera el usuario en sesión desde sesión.txt.
+     * Recupera el saldo del usuario en sesión desde `usuarios.txt`.
+     * @return Saldo actual o `-1` si hay error.
+     */
+    public static double obtenerSaldoUsuarioActivo() {
+        String usuarioActivo = obtenerUsuarioActivo();
+        if (usuarioActivo == null) {
+            System.out.println("No hay usuario en sesión.");
+            return -1;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(ARCHIVO_USUARIOS))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                if (datos.length == 5 && datos[2].trim().equals(usuarioActivo)) {
+                    return Double.parseDouble(datos[4].trim());
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer usuarios.txt: " + e.getMessage());
+        }
+
+        return -1;
+    }
+
+    /**
+     * Recupera el usuario en sesión desde `sesion.txt`.
      * @return Usuario en sesión o `null` si no hay datos.
      */
     public static String obtenerUsuarioActivo() {
@@ -65,10 +91,10 @@ public class moneda {
     }
 
     /**
-     * Realiza una transferencia de dinero usando el usuario en sesión como origen.
+     * Realiza una transferencia y actualiza el saldo del usuario en sesión.
      * @param usuarioDestino Usuario que recibe el dinero.
      * @param cantidad Cantidad a transferir.
-     * @return `true` si la transferencia fue exitosa, `false` si hubo un error.
+     * @return `true` si la transferencia fue exitosa, `false` si hubo error.
      */
     public static boolean transferirDesdeSesion(String usuarioDestino, double cantidad) {
         String usuarioOrigen = obtenerUsuarioActivo();
@@ -77,7 +103,12 @@ public class moneda {
             return false;
         }
 
-        return transferirEntreUsuarios(usuarioOrigen, usuarioDestino, cantidad);
+        boolean exito = transferirEntreUsuarios(usuarioOrigen, usuarioDestino, cantidad);
+        if (exito) {
+            actualizarSaldoSesion(usuarioOrigen);
+        }
+
+        return exito;
     }
 
     public static boolean transferirEntreUsuarios(String usuarioOrigen, String usuarioDestino, double cantidad) {
@@ -128,5 +159,15 @@ public class moneda {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Actualiza dinámicamente el saldo del usuario en sesión.
+     * @param usuarioOrigen Usuario en sesión.
+     */
+    public static void actualizarSaldoSesion(String usuarioOrigen) {
+        double nuevoSaldo = obtenerSaldoUsuarioActivo();
+        moneda miMoneda = new moneda(nuevoSaldo);
+        miMoneda.setValor(nuevoSaldo);
     }
 }

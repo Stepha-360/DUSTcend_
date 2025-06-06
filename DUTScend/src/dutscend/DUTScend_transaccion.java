@@ -188,7 +188,8 @@ public class DUTScend_transaccion extends javax.swing.JFrame {
         }
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(null, "Por favor, ingresa un número válido.");
-    }
+    
+  }
 
     }//GEN-LAST:event_transferirActionPerformed
 
